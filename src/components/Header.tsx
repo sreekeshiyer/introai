@@ -8,7 +8,7 @@ export default function Header() {
                 <Image
                     alt="logo"
                     src="/logo.png"
-                    className="sm:w-52 sm:h-52 w-12 h-12 my-4"
+                    className="sm:w-52 sm:h-52 w-32 h-32 my-4"
                     width={500}
                     height={500}
                 />
