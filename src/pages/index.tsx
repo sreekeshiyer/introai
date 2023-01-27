@@ -93,6 +93,7 @@ const Home: NextPage = () => {
                         </label>
                         <textarea
                             id={intro}
+                            name={intro}
                             className="bg-gray-800 rounded-md p-3 text-white focus:outline-none focus:shadow-outline-blue w-full h-40"
                             value={intro}
                             onChange={(e) => setIntro(e.target.value)}

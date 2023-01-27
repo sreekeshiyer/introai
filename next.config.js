@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
-module.exports = nextConfig
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+    enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig = {
+    reactStrictMode: true,
+    webpack: (config) => {
+        config.plugins.push(new BundleAnalyzerPlugin());
+        return config;
+    },
+};
+
+module.exports = withBundleAnalyzer(nextConfig);
