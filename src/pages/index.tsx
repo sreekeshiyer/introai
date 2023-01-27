@@ -1,8 +1,9 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Toaster, toast } from "react-hot-toast";
 import { finalPrompt, findQuote } from "@/helpers/prompts";
+import { API_URL } from "@/config/index";
 import ReactMarkdown from "react-markdown";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
     const [platform, setPlatform] = useState<string>("Technical Interview");
     const [generatedIntros, setGeneratedIntros] = useState<string>("");
     const [quote, setQuote] = useState<string>("");
+    const [no_of_intros, setNoOfIntros] = useState<string>("100+");
 
     const options = ["Professional", "Funny", "Casual"];
     const platforms = [
@@ -26,6 +28,22 @@ const Home: NextPage = () => {
         "Tweet",
         "Twitter Bio",
     ];
+
+    const getTotalClicks = async () => {
+        try {
+            let res = await fetch(`${API_URL}/clicks`);
+
+            let { clicks } = await res.json();
+
+            return clicks;
+        } catch (e) {
+            return "100+";
+        }
+    };
+
+    useEffect(() => {
+        getTotalClicks().then((clicks) => setNoOfIntros(clicks.toString()));
+    }, []);
 
     const generateIntro = async (e: any) => {
         e.preventDefault();
@@ -67,6 +85,15 @@ const Home: NextPage = () => {
             const chunkValue = decoder.decode(value);
             setGeneratedIntros((prev) => prev + chunkValue);
         }
+
+        await fetch(`${API_URL}/add`);
+
+        try {
+            setNoOfIntros((Number(no_of_intros) + 1).toString());
+        } catch (e) {
+            setNoOfIntros("100+");
+        }
+
         setQuote(findQuote(platform));
         setLoading(false);
     };
@@ -79,6 +106,10 @@ const Home: NextPage = () => {
                     Let AI introduce you!
                 </h1>
                 <div className="my-6"></div>
+                <h1 className="text-[0.95rem] font-light text-slate-300 mb-6">
+                    <span className="font-semibold">{no_of_intros}</span> intros
+                    generated so far
+                </h1>
                 <div className="max-w-xl">
                     <div className="bg-gray-900 rounded-md p-2 w-full">
                         <label
