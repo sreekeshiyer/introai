@@ -22,7 +22,7 @@ const handler = async (req: NextRequest): Promise<Response> => {
     }
 
     const payload: OpenAIStreamPayload = {
-        model: "text-curie-002",
+        model: "text-davinci-003",
         prompt,
         temperature: 0.7,
         top_p: 1,
